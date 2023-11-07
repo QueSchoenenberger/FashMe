@@ -1,6 +1,12 @@
 package com.lepquold.model;
 
+import java.util.SplittableRandom;
+
 public class Style {
     private int styleID;
-    private String dressCode;
+    public String dressCode;
+
+    public Style(String dressCode) {
+        this.dressCode = dressCode;
+    }
 }

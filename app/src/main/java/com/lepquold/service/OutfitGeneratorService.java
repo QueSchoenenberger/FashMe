@@ -16,16 +16,17 @@ public class OutfitGeneratorService {
 
         for (Clothing clothing : filteredClothes) {
             BodyParts bodyPart = clothing.type.bodyPart;
+            String dressCode = clothing.style.dressCode;
 
-            if (bodyPart == BodyParts.FACE && outfit.getClothingForFace() == null) {
+            if (bodyPart == BodyParts.FACE && outfit.getClothingForFace() == null && dressCode.equals(request.style.dressCode)) {
                 outfit.setClothingForFace(clothing);
-            } else if (bodyPart == BodyParts.HEAD && outfit.getClothingForHead() == null) {
+            } else if (bodyPart == BodyParts.HEAD && outfit.getClothingForHead() == null && dressCode.equals(request.style.dressCode)) {
                 outfit.setClothingForHead(clothing);
-            } else if (bodyPart == BodyParts.TORSO && outfit.getClothingForTorso() == null) {
+            } else if (bodyPart == BodyParts.TORSO && outfit.getClothingForTorso() == null && dressCode.equals(request.style.dressCode)) {
                 outfit.setClothingForTorso(clothing);
-            } else if (bodyPart == BodyParts.LEGS && outfit.getClothingForLegs() == null) {
+            } else if (bodyPart == BodyParts.LEGS && outfit.getClothingForLegs() == null && dressCode.equals(request.style.dressCode)) {
                 outfit.setClothingForLegs(clothing);
-            } else if (bodyPart == BodyParts.FEET && outfit.getClothingForFeet() == null) {
+            } else if (bodyPart == BodyParts.FEET && outfit.getClothingForFeet() == null && dressCode.equals(request.style.dressCode)) {
                 outfit.setClothingForFeet(clothing);
             }
         }
@@ -39,7 +40,7 @@ public class OutfitGeneratorService {
 
         for (Clothing clothing : clothes) {
             boolean isWaterproof = clothing.isWaterProof;
-            int clothingTemperature = clothing.temperature;
+            float clothingTemperature = clothing.temperature;
 
             if (isRaining && !isWaterproof) {
                 continue;
