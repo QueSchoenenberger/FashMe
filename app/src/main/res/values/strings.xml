@@ -47,7 +47,7 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
 
-    <string-array name="type">
+    <string-array name="type"> 
         <item>T-Shirt</item>
         <item>Pullover</item>
         <item>Jacket</item>
