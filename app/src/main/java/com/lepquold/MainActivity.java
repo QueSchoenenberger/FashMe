@@ -34,7 +34,22 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this,WardrobeActivity.class);
         startActivity(intent);
     }
-    public void Click1(View view){
+    public void toHome(){
+        Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);
+    }
+    public void toFashMe(){
+        Intent intent = new Intent(this,GenerateOutfitActivity.class);
+        startActivity(intent);
+    }
+
+    public void homeClick(View view){
+        toHome();
+    }
+    public void fashMeClick(View view){
+        toFashMe();
+    }
+    public void wardrobeClick(View view){
         toWardrobe();
     }
 }

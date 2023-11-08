@@ -4,6 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_first"
     tools:context=".CreateClothActivity">
+
+    <View
+        android:id="@+id/view5"
+        android:layout_width="451dp"
+        android:layout_height="100dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/homeIcon"
+        android:layout_width="97dp"
+        android:layout_height="105dp"
+        android:layout_marginEnd="148dp"
+        android:onClick="homeClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_home_black_24dp" />
+
+    <ImageView
+        android:id="@+id/WardrobeIcon"
+        android:layout_width="76dp"
+        android:layout_height="78dp"
+        android:layout_marginEnd="304dp"
+        android:layout_marginBottom="12dp"
+        android:onClick="wardrobeClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/kleiderschrank" />
+
+    <ImageView
+        android:id="@+id/ClothIcon"
+        android:layout_width="72dp"
+        android:layout_height="75dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="14dp"
+        android:onClick="fashMeClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/generateoutfit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

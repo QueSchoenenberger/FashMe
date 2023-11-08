@@ -28,11 +28,26 @@ public class WardrobeActivity extends AppCompatActivity {
         binding = ActivityWardrobeBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_wardrobe);
     }
-    private void toMain(){
+    public void toWardrobe(){
+        Intent intent = new Intent(this,WardrobeActivity.class);
+        startActivity(intent);
+    }
+    public void toHome(){
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
     }
+    public void toFashMe(){
+        Intent intent = new Intent(this,GenerateOutfitActivity.class);
+        startActivity(intent);
+    }
+
     public void homeClick(View view){
-        toMain();
+        toHome();
+    }
+    public void fashMeClick(View view){
+        toFashMe();
+    }
+    public void wardrobeClick(View view){
+        toWardrobe();
     }
 }
