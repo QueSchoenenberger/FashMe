@@ -41,6 +41,11 @@ public class WardrobeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void toAddClothingView() {
+        Intent intent = new Intent(this, CreateClothActivity.class);
+        startActivity(intent);
+    }
+
     public void homeClick(View view){
         toHome();
     }
@@ -50,4 +55,5 @@ public class WardrobeActivity extends AppCompatActivity {
     public void wardrobeClick(View view){
         toWardrobe();
     }
+    public void buttonClick(View view) { toAddClothingView(); }
 }

@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 public class CreateClothActivity extends AppCompatActivity {
 
@@ -12,6 +14,16 @@ public class CreateClothActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_cloth);
+
+        Spinner type = findViewById(R.id.type);
+        ArrayAdapter<CharSequence> adapterType = ArrayAdapter.createFromResource(this, R.array.type, android.R.layout.simple_spinner_item);
+        adapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        type.setAdapter(adapterType);
+
+        Spinner style = findViewById(R.id.style);
+        ArrayAdapter<CharSequence> adapterStyle = ArrayAdapter.createFromResource(this, R.array.style, android.R.layout.simple_spinner_item);
+        adapterStyle.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        style.setAdapter(adapterStyle);
     }
     public void toWardrobe(){
         Intent intent = new Intent(this,WardrobeActivity.class);
@@ -35,4 +47,7 @@ public class CreateClothActivity extends AppCompatActivity {
     public void wardrobeClick(View view){
         toWardrobe();
     }
+
+
+
 }

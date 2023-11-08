@@ -46,5 +46,20 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+
+    <string-array name="type">
+        <item>T-Shirt</item>
+        <item>Pullover</item>
+        <item>Jacket</item>
+        <item>Pants</item>
+        <item>Hat</item>
+        <item>Glasses</item>
+    </string-array>
+
+    <string-array name="style">
+        <item>Casual</item>
+        <item>Smart-Casual</item>
+    </string-array>
+
     <string name="button">Button</string>
 </resources>
