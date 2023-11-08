@@ -8,6 +8,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.lepquold.helper.ListAdapter;
+
+import java.util.ArrayList;
+
 public class CreateClothActivity extends AppCompatActivity {
 
     @Override
@@ -24,6 +28,7 @@ public class CreateClothActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapterStyle = ArrayAdapter.createFromResource(this, R.array.style, android.R.layout.simple_spinner_item);
         adapterStyle.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         style.setAdapter(adapterStyle);
+
     }
     public void toWardrobe(){
         Intent intent = new Intent(this,WardrobeActivity.class);
