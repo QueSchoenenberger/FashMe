@@ -7,6 +7,18 @@ public class Outfit {
     private Clothing clothingForLegs;
     private Clothing clothingForFeet;
 
+    public Outfit(Outfit other) {
+        // Copy the fields from the other outfit
+        this.clothingForHead = other.clothingForHead;
+        this.clothingForFace = other.clothingForFace;
+        this.clothingForTorso = other.clothingForTorso;
+        this.clothingForLegs = other.clothingForLegs;
+        this.clothingForFeet = other.clothingForFeet;
+    }
+
+    public Outfit() {
+    }
+
     public void setClothingForHead(Clothing clothingForHead) {
         this.clothingForHead = clothingForHead;
     }

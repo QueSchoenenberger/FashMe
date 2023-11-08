@@ -10,37 +10,74 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OutfitGeneratorService {
-    public Outfit generateOutfit(OutfitRequest request, Wardrobe wardrobe) {
+    public List<Outfit> generateOutfits(OutfitRequest request, Wardrobe wardrobe) {
         List<Clothing> filteredClothes = filterClothes(request.temperature, request.isRaining, wardrobe.getClothes());
-        Outfit outfit = new Outfit();
+        List<Outfit> outfits = new ArrayList<>();
 
+        List<Clothing> headClothes = new ArrayList<>();
+        List<Clothing> faceClothes = new ArrayList<>();
+        List<Clothing> torsoClothes = new ArrayList<>();
+        List<Clothing> legsClothes = new ArrayList<>();
+        List<Clothing> feetClothes = new ArrayList<>();
+        List<Clothing> hatClothes = new ArrayList<>();
+
+        // Separate clothes based on type and body part
         for (Clothing clothing : filteredClothes) {
-            BodyParts bodyPart = clothing.type.bodyPart;
-            String dressCode = clothing.style.dressCode;
-
-            if (bodyPart == BodyParts.FACE && outfit.getClothingForFace() == null && dressCode.equals(request.style.dressCode)) {
-                outfit.setClothingForFace(clothing);
-            } else if (bodyPart == BodyParts.HEAD && outfit.getClothingForHead() == null && dressCode.equals(request.style.dressCode)) {
-                outfit.setClothingForHead(clothing);
-            } else if (bodyPart == BodyParts.TORSO && outfit.getClothingForTorso() == null && dressCode.equals(request.style.dressCode)) {
-                outfit.setClothingForTorso(clothing);
-            } else if (bodyPart == BodyParts.LEGS && outfit.getClothingForLegs() == null && dressCode.equals(request.style.dressCode)) {
-                outfit.setClothingForLegs(clothing);
-            } else if (bodyPart == BodyParts.FEET && outfit.getClothingForFeet() == null && dressCode.equals(request.style.dressCode)) {
-                outfit.setClothingForFeet(clothing);
+            if (clothing.type.bodyPart == BodyParts.HEAD) {
+                headClothes.add(clothing);
+            } else if (clothing.type.bodyPart == BodyParts.FACE) {
+                faceClothes.add(clothing);
+            } else if (clothing.type.bodyPart == BodyParts.TORSO) {
+                torsoClothes.add(clothing);
+            } else if (clothing.type.bodyPart == BodyParts.LEGS) {
+                legsClothes.add(clothing);
+            } else if (clothing.type.bodyPart == BodyParts.FEET) {
+                feetClothes.add(clothing);
+            } else if (clothing.type.bodyPart == BodyParts.HEAD && clothing.type.name.equals("Hat")) {
+                hatClothes.add(clothing);
             }
         }
 
-        return outfit;
+        // Generate outfits with all possible combinations
+        for (Clothing torso : torsoClothes) {
+            for (Clothing legs : legsClothes) {
+                for (Clothing feet : feetClothes) {
+                    Outfit outfit = new Outfit();
+                    outfit.setClothingForTorso(torso);
+                    outfit.setClothingForLegs(legs);
+                    outfit.setClothingForFeet(feet);
+
+                    for (Clothing tshirtOrPullover : torsoClothes) {
+                        outfit.setClothingForTorso(tshirtOrPullover);
+
+                        for (Clothing hat : hatClothes) {
+                            outfit.setClothingForHead(hat);
+
+                            for (Clothing face : faceClothes) {
+                                outfit.setClothingForFace(face);
+                                outfits.add(new Outfit(outfit));
+                            }
+
+                            outfit.setClothingForFace(null); // Clear face
+                        }
+
+                        outfits.add(new Outfit(outfit));
+                    }
+                }
+            }
+        }
+
+        return outfits;
     }
 
 
-    private List<Clothing> filterClothes(float temperature, boolean isRaining, List<Clothing> clothes) {
+
+    private List<Clothing> filterClothes(double temperature, boolean isRaining, List<Clothing> clothes) {
         List<Clothing> filtered = new ArrayList<>();
 
         for (Clothing clothing : clothes) {
             boolean isWaterproof = clothing.isWaterProof;
-            float clothingTemperature = clothing.temperature;
+            double clothingTemperature = clothing.temperature;
 
             if (isRaining && !isWaterproof) {
                 continue;
