@@ -32,4 +32,7 @@ public class WardrobeActivity extends AppCompatActivity {
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
     }
+    public void homeClick(View view){
+        toMain();
+    }
 }
