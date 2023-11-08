@@ -16,7 +16,6 @@
         android:layout_marginTop="151dp"
         android:layout_marginEnd="79dp"
         android:layout_marginBottom="471dp"
-        android:background="#00FAF1F1"
         android:backgroundTint="#FFFDFD"
         android:text="Good Morning"
         android:textColor="@color/white"
@@ -31,7 +30,7 @@
     <View
         android:id="@+id/view5"
         android:layout_width="451dp"
-        android:layout_height="100dp"
+        android:layout_height="105dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,8 +41,7 @@
         android:id="@+id/homeIcon"
         android:layout_width="97dp"
         android:layout_height="105dp"
-        android:layout_marginEnd="148dp"
-        android:onClick="homeClick"
+        android:layout_marginEnd="156dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_home_black_24dp" />
