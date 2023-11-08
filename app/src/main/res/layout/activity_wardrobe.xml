@@ -45,11 +45,12 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/homeIcon"
         android:layout_width="76dp"
         android:layout_height="78dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="168dp"
+        android:layout_marginBottom="20dp"
+        android:onClick="homeClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_home_black_24dp" />
@@ -68,7 +69,7 @@
         android:id="@+id/imageView4"
         android:layout_width="76dp"
         android:layout_height="78dp"
-        android:layout_marginEnd="168dp"
+        android:layout_marginEnd="48dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
