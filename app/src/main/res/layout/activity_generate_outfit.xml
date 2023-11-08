@@ -99,6 +99,7 @@
         android:layout_height="51dp"
         android:layout_marginEnd="61dp"
         android:layout_marginBottom="232dp"
+        android:onClick="fashMeCLick"
         android:text="Fash Me !"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -41,4 +41,8 @@ public class GenerateOutfitActivity extends AppCompatActivity {
     public void wardrobeClick(View view){
         toWardrobe();
     }
+
+    public void fashMeCLick(View view) {
+        startActivity(new Intent(this,RewievOutfitActivity.class));
+    }
 }
