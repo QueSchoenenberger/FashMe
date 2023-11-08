@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void Click1(View view){
-        Intent intent = new Intent(this, WardrobeActivity.class);
-        startActivity(intent);
-        //toWardrobe();
+        toWardrobe();
     }
 }
