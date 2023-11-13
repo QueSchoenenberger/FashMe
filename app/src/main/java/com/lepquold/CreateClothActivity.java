@@ -115,7 +115,6 @@ public class CreateClothActivity extends AppCompatActivity {
             makeErrorMessage("Error while selecting the type");
             return;
         }
-
         Switch switch1 = (Switch) findViewById(R.id.switch1);
         boolean waterproof = switch1.isActivated();
 

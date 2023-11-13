@@ -4,14 +4,15 @@ import com.lepquold.model.BodyParts;
 import com.lepquold.model.Clothing;
 import com.lepquold.model.Outfit;
 import com.lepquold.model.OutfitRequest;
+import com.lepquold.model.Style;
 import com.lepquold.model.Wardrobe;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OutfitGeneratorService {
-    public List<Outfit> generateOutfits(OutfitRequest request, Wardrobe wardrobe) {
-        List<Clothing> filteredClothes = filterClothes(request.getTemperature(), request.isRaining(), wardrobe.getClothes());
+    public List<Outfit> generateOutfits(OutfitRequest request, Wardrobe wardrobe, Style style) {
+        List<Clothing> filteredClothes = filterClothes(request.getTemperature(), request.isRaining(), style, wardrobe.getClothes());
         List<Outfit> outfits = new ArrayList<>();
 
         List<Clothing> headClothes = new ArrayList<>();
@@ -70,9 +71,7 @@ public class OutfitGeneratorService {
         return outfits;
     }
 
-
-
-    private List<Clothing> filterClothes(double temperature, boolean isRaining, List<Clothing> clothes) {
+    private List<Clothing> filterClothes(double temperature, boolean isRaining, Style style, List<Clothing> clothes) {
         List<Clothing> filtered = new ArrayList<>();
 
         for (Clothing clothing : clothes) {
@@ -83,12 +82,12 @@ public class OutfitGeneratorService {
                 continue;
             }
 
-            if (clothingTemperature >= (temperature - 10) && clothingTemperature <= (temperature + 10)) {
+            if (clothingTemperature >= (temperature - 10) && clothingTemperature <= (temperature + 10) &&
+                    clothing.style == style) {
                 filtered.add(clothing);
             }
         }
 
         return filtered;
     }
-
 }

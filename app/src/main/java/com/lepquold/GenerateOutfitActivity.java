@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.lepquold.model.Style;
 
 public class GenerateOutfitActivity extends AppCompatActivity {
 
@@ -42,11 +44,17 @@ public class GenerateOutfitActivity extends AppCompatActivity {
     public void fashMeCLick(View view) {
         TextInputEditText inputStandort = (TextInputEditText) findViewById(R.id.StandortInput);
         String Standort = inputStandort.getText().toString();
+        if (Standort.length() < 1){
+            Toast t = Toast.makeText(this,"Bitte gibt einen Standort ein", Toast.LENGTH_SHORT);
+            t.show();
+            return;
+        }
 
         Spinner styleSpinner = (Spinner) findViewById(R.id.styleSpinner);
         String style = styleSpinner.getSelectedItem().toString();
-
-        startActivity(new Intent(this,RewievOutfitActivity.class));
-
+        Intent intent = new Intent(this,RewievOutfitActivity.class);
+        intent.putExtra("location",Standort);
+        intent.putExtra("style",style);
+        startActivity(intent);
     }
 }

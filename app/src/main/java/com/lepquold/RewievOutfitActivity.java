@@ -9,6 +9,7 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.lepquold.databinding.ActivityRewievOutfitBinding;
@@ -31,6 +32,10 @@ import java.util.List;
 public class RewievOutfitActivity extends AppCompatActivity implements WeatherInfoListener {
     ClothingAdapter clothingAdapter = new ClothingAdapter();
     private ActivityRewievOutfitBinding binding;
+
+    int outfitcount;
+
+    private Bundle savedInsatnceSate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,31 +43,66 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
         binding = ActivityRewievOutfitBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        this.savedInsatnceSate = savedInsatnceSate;
+        outfitcount = 0;
     }
     @Override
     protected void onResume() {
         super.onResume();
-
-        new WeatherApiTask(this).execute("Zürich");
+        Intent intent = getIntent();
+        new WeatherApiTask(this).execute(intent.getStringExtra("location"));
     }
 
     @Override
     public void onWeatherInfoReceived(WeatherInfo weatherInfo) {
+        Intent intent = getIntent();
+        String styleString = intent.getStringExtra("style");
+        Style selectedStyle = Style.Casual;
+        if (styleString.equals("Formell-Business")){
+            selectedStyle = Style.FormellBusiness;
+        }
+        if (styleString.equals("Smart-Casual")){
+            selectedStyle = Style.SmartCasual;
+        }
+        if (styleString.equals("Leger")){
+            selectedStyle = Style.Leger;
+        }
+        if (styleString.equals("Sportive")){
+            selectedStyle = Style.Sportive;
+        }
+        if (styleString.equals("Vintage")){
+            selectedStyle = Style.Vintage;
+        }
         double temperature = weatherInfo.getTemperature();
         boolean isRaining = weatherInfo.isRaining();
         System.out.println(temperature);
         System.out.println(isRaining);
+        OutfitRequest or = new OutfitRequest(temperature,isRaining,Style.Casual);
+        OutfitGeneratorService os = new OutfitGeneratorService();
+        Wardrobe wardrobe = getClothingItemsFromStorage();
+        List<Outfit> outfits = os.generateOutfits(or,wardrobe,selectedStyle);
+        if (outfits.size() > 0 && outfits.size() > outfitcount) {
+            showOutfit(outfits.get(outfitcount));
+        }else {
+            Toast t = Toast.makeText(this,"Kein Passendes Outfit gefunden", Toast.LENGTH_SHORT);
+            t.show();
+        }
     }
-
     @Override
     public void onWeatherApiError(Exception e) {
         e.printStackTrace();
     }
-
     public void showOutfit(Outfit outfit){
-        binding.textViewFace.setText(outfit.getClothingForFace().description);
+        binding.textViewTursor.setText(outfit.getClothingForTorso().description);
+        binding.textViewFeet.setText(outfit.getClothingForFeet().description);
+        binding.textViewLeg.setText(outfit.getClothingForLegs().description);
+        if (outfit.getClothingForHead() != null){
+            binding.textViewHead.setText(outfit.getClothingForHead().description);
+        }
+        if (outfit.getClothingForFace() != null){
+            binding.textViewFace.setText(outfit.getClothingForFace().description);
+        }
     }
-
     public void toWardrobe(){
         Intent intent = new Intent(this,WardrobeActivity.class);
         startActivity(intent);
@@ -106,6 +146,7 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
                 clothingAdapter.notifyDataSetChanged();
             }
             return wardrobe;
+
         } catch (Exception e) {
             System.out.println("Could not read storage: " + e.getMessage());
         }
@@ -116,11 +157,14 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
         toHome();
     }
     public void fashMeClick(View view){
+        toFashMe();
     }
     public void wardrobeClick(View view){
         toWardrobe();
     }
 
     public void reloadClick(View view) {
+        outfitcount++;
+        onResume();
     }
 }

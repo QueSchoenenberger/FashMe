@@ -1,6 +1,6 @@
 package com.lepquold.model;
 
-public class Outfit {
+public class Outfit{
     private Clothing clothingForHead;
     private Clothing clothingForFace;
     private Clothing clothingForTorso;
