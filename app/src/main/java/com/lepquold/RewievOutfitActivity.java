@@ -19,6 +19,8 @@ import com.lepquold.model.Style;
 import com.lepquold.model.Wardrobe;
 import com.lepquold.model.WeatherInfo;
 import com.lepquold.service.OutfitGeneratorService;
+import com.lepquold.service.WeatherApiTask;
+import com.lepquold.service.WeatherInfoListener;
 import com.lepquold.service.WeatherService;
 
 import java.io.ByteArrayInputStream;
@@ -26,7 +28,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.List;
 
-public class RewievOutfitActivity extends AppCompatActivity {
+public class RewievOutfitActivity extends AppCompatActivity implements WeatherInfoListener {
     ClothingAdapter clothingAdapter = new ClothingAdapter();
     private ActivityRewievOutfitBinding binding;
     @Override
@@ -40,27 +42,27 @@ public class RewievOutfitActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        OutfitGeneratorService os = new OutfitGeneratorService();
-        Wardrobe wardrobe = getClothingItemsFromStorage();
-        WeatherService ws = new WeatherService();
-        WeatherInfo wi;
-        Thread thread = new Thread((Runnable) ws);
-        try {
-            wi = ws.getTemperatureAndRainStatus("Zürich");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        if (wardrobe != null){
-            List<Outfit> outfits = os.generateOutfits(new OutfitRequest(wi.getTemperature(),wi.isRaining(), Style.Casual),wardrobe);
-            showOutfit(outfits.get(0));
-        }else {
-            Intent intent = new Intent(this,MainActivity.class);
-            startActivity(intent);
-        }
+
+        new WeatherApiTask(this).execute("Zürich");
     }
+
+    @Override
+    public void onWeatherInfoReceived(WeatherInfo weatherInfo) {
+        double temperature = weatherInfo.getTemperature();
+        boolean isRaining = weatherInfo.isRaining();
+        System.out.println(temperature);
+        System.out.println(isRaining);
+    }
+
+    @Override
+    public void onWeatherApiError(Exception e) {
+        e.printStackTrace();
+    }
+
     public void showOutfit(Outfit outfit){
         binding.textViewFace.setText(outfit.getClothingForFace().description);
     }
+
     public void toWardrobe(){
         Intent intent = new Intent(this,WardrobeActivity.class);
         startActivity(intent);
@@ -74,17 +76,6 @@ public class RewievOutfitActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void homeClick(View view){
-        toHome();
-    }
-    public void fashMeClick(View view){
-    }
-    public void wardrobeClick(View view){
-        toWardrobe();
-    }
-
-    public void reloadClick(View view) {
-    }
     public Wardrobe getClothingItemsFromStorage() {
         try {
             // Fetching the stored data
@@ -115,10 +106,21 @@ public class RewievOutfitActivity extends AppCompatActivity {
                 clothingAdapter.notifyDataSetChanged();
             }
             return wardrobe;
-
         } catch (Exception e) {
             System.out.println("Could not read storage: " + e.getMessage());
         }
         return null;
+    }
+
+    public void homeClick(View view){
+        toHome();
+    }
+    public void fashMeClick(View view){
+    }
+    public void wardrobeClick(View view){
+        toWardrobe();
+    }
+
+    public void reloadClick(View view) {
     }
 }
