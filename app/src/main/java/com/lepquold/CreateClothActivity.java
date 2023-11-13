@@ -119,10 +119,7 @@ public class CreateClothActivity extends AppCompatActivity {
         Slider slider = (Slider) findViewById(R.id.slider);
         Float temperture = slider.getValue();
 
-        Type tshirt = new Type(type, BodyParts.TORSO);
-        Style styleStyle = new Style(style);
-
-        Clothing c = new Clothing(discription,temperture.doubleValue(),waterproof,styleStyle,tshirt);
+        Clothing c = new Clothing(discription,temperture.doubleValue(),waterproof,selectedStyle,selectedType);
 
         persistClothingItem(c);
         // Add item
