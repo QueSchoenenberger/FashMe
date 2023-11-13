@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Spinner;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 public class RewievOutfitActivity extends AppCompatActivity {
 
@@ -30,7 +34,6 @@ public class RewievOutfitActivity extends AppCompatActivity {
         toHome();
     }
     public void fashMeClick(View view){
-        toFashMe();
     }
     public void wardrobeClick(View view){
         toWardrobe();

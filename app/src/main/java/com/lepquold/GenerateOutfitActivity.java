@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 public class GenerateOutfitActivity extends AppCompatActivity {
 
     @Override
@@ -27,22 +29,24 @@ public class GenerateOutfitActivity extends AppCompatActivity {
         Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
     }
-    public void toFashMe(){
-        Intent intent = new Intent(this,GenerateOutfitActivity.class);
-        startActivity(intent);
-    }
 
     public void homeClick(View view){
         toHome();
     }
     public void fashMeClick(View view){
-        toFashMe();
     }
     public void wardrobeClick(View view){
         toWardrobe();
     }
 
     public void fashMeCLick(View view) {
+        TextInputEditText inputStandort = (TextInputEditText) findViewById(R.id.StandortInput);
+        String Standort = inputStandort.getText().toString();
+
+        Spinner styleSpinner = (Spinner) findViewById(R.id.styleSpinner);
+        String style = styleSpinner.getSelectedItem().toString();
+
         startActivity(new Intent(this,RewievOutfitActivity.class));
+
     }
 }
