@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -84,9 +85,10 @@ public class CreateClothActivity extends AppCompatActivity {
         Style styleStyle = new Style(style);
 
         Clothing c = new Clothing(discription,temperture.doubleValue(),waterproof,styleStyle,tshirt);
-        c.toString();
 
-
-
+        // Add item
+        Intent intent = new Intent(this, WardrobeActivity.class);
+        intent.putExtra("clothing_item", c);
+        startActivity(intent);
     }
 }

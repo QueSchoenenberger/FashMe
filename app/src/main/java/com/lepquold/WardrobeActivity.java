@@ -19,9 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lepquold.databinding.ActivityWardrobeBinding;
 import com.lepquold.helper.ListAdapter;
+import com.lepquold.model.Clothing;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class WardrobeActivity extends AppCompatActivity {
     private ActivityWardrobeBinding binding;
@@ -32,13 +34,40 @@ public class WardrobeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityWardrobeBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.activity_wardrobe);
+        setContentView(binding.getRoot());
 
-        // List
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Initialize your adapter with an empty list or a persistent list
         adapter = new ListAdapter(new ArrayList<>());
+        recyclerView.setAdapter(adapter);
+
+        handleIntent(getIntent());
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (intent != null && intent.hasExtra("clothing_item")) {
+            Clothing newClothing = intent.getParcelableExtra("clothing_item");
+            if (newClothing != null) {
+                adapter.addItem(newClothing.description);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+    }
+
     public void toWardrobe(){
         Intent intent = new Intent(this,WardrobeActivity.class);
         startActivity(intent);
@@ -55,11 +84,6 @@ public class WardrobeActivity extends AppCompatActivity {
     public void toAddClothingView() {
         Intent intent = new Intent(this, CreateClothActivity.class);
         startActivity(intent);
-    }
-
-    public void addToList() {
-        adapter.addItem("New Item");
-        recyclerView.setAdapter(adapter);
     }
 
     public void homeClick(View view){
