@@ -38,4 +38,7 @@ public class RewievOutfitActivity extends AppCompatActivity {
     public void wardrobeClick(View view){
         toWardrobe();
     }
+
+    public void reloadClick(View view) {
+    }
 }
