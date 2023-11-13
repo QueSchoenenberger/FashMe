@@ -28,6 +28,17 @@
         app:srcCompat="@drawable/ic_home_black_24dp" />
 
     <ImageView
+        android:id="@+id/ReloadIcon"
+        android:layout_width="60dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="332dp"
+        android:layout_marginBottom="124dp"
+        android:onClick="reloadClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/aktualisierung" />
+
+    <ImageView
         android:id="@+id/WardrobeIcon"
         android:layout_width="76dp"
         android:layout_height="78dp"
@@ -51,13 +62,91 @@
 
     <ImageView
         android:id="@+id/PersonIcon"
-        android:layout_width="482dp"
-        android:layout_height="591dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="88dp"
+        android:layout_width="410dp"
+        android:layout_height="507dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="200dp"
+        android:alpha="0.6"
         android:onClick="wardrobeClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/personen" />
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="836dp"
+        android:text="Heres your outfit of the day"
+        android:textColor="@color/white"
+        android:textSize="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewHead"
+        android:layout_width="127dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="140dp"
+        android:layout_marginBottom="632dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewFace"
+        android:layout_width="127dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="140dp"
+        android:layout_marginBottom="584dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewTursor"
+        android:layout_width="127dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="140dp"
+        android:layout_marginBottom="484dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewLeg"
+        android:layout_width="127dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="140dp"
+        android:layout_marginBottom="344dp"
+        android:textAlignment="center"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewFeet"
+        android:layout_width="127dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="140dp"
+        android:layout_marginBottom="256dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
