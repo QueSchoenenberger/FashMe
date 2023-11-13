@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class WeatherService {
+public class WeatherService{
 
     private static final String GEOCODING_API_URL = "https://api.openweathermap.org/geo/1.0/direct";
     private static final String WEATHER_API_URL = "https://api.openweathermap.org/data/2.5/weather";

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class OutfitGeneratorService {
     public List<Outfit> generateOutfits(OutfitRequest request, Wardrobe wardrobe) {
-        List<Clothing> filteredClothes = filterClothes(request.temperature, request.isRaining, wardrobe.getClothes());
+        List<Clothing> filteredClothes = filterClothes(request.getTemperature(), request.isRaining(), wardrobe.getClothes());
         List<Outfit> outfits = new ArrayList<>();
 
         List<Clothing> headClothes = new ArrayList<>();

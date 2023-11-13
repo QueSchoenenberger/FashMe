@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -33,6 +35,9 @@ public class CreateClothActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_cloth);
 
@@ -45,7 +50,6 @@ public class CreateClothActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapterStyle = ArrayAdapter.createFromResource(this, R.array.style, android.R.layout.simple_spinner_item);
         adapterStyle.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         style.setAdapter(adapterStyle);
-
     }
     public void toWardrobe(){
         Intent intent = new Intent(this,WardrobeActivity.class);
@@ -70,7 +74,7 @@ public class CreateClothActivity extends AppCompatActivity {
         toWardrobe();
     }
     public void makeErrorMessage(String error){
-
+     //   binding.textViewError.setText(error);
     }
 
 
@@ -106,9 +110,9 @@ public class CreateClothActivity extends AppCompatActivity {
 
         Spinner spinnerType = (Spinner) findViewById(R.id.typeCreate);
         String type = spinnerType.getSelectedItem().toString();
-        Type selectedType = null;
+        Type selectedType;
         try {
-            selectedType = Types.types.get(type);
+            selectedType = Types.getTypes().get(type);
         }catch (Exception e) {
             makeErrorMessage("Error while selecting the type");
             return;

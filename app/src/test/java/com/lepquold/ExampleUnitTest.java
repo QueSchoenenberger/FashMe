@@ -23,7 +23,7 @@ import java.util.List;
 public class ExampleUnitTest {
     @Test
     public void generateOutfit_generates_correct_outfit() {
-        Style casual = new Style("casual");
+        Style casual = Style.Casual;
         Type tshirtType = new Type("T-Shirt", BodyParts.TORSO);
         Type pantsType = new Type("Pants", BodyParts.LEGS);
         Type shoeType = new Type("Shoes", BodyParts.FEET);
@@ -47,10 +47,7 @@ public class ExampleUnitTest {
         clothes.add(hat);
 
         Wardrobe wardrobe = new Wardrobe(clothes);
-        OutfitRequest request = new OutfitRequest();
-        request.temperature = 20.00;
-        request.isRaining = false;
-        request.style = casual;
+        OutfitRequest request = new OutfitRequest(20.00,false,Style.Casual);
 
         OutfitGeneratorService service = new OutfitGeneratorService();
 
