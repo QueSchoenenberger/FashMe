@@ -1,71 +1,58 @@
 package com.lepquold;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Base64;
 import android.view.View;
 
-import androidx.core.view.WindowCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lepquold.databinding.ActivityWardrobeBinding;
-import com.lepquold.helper.ListAdapter;
+import com.lepquold.helper.ClothingAdapter;
 import com.lepquold.model.Clothing;
+import com.lepquold.model.Wardrobe;
 
-import java.time.Instant;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class WardrobeActivity extends AppCompatActivity {
-    private ActivityWardrobeBinding binding;
-    private ListAdapter adapter;
-    private RecyclerView recyclerView;
+    private ActivityWardrobeBinding binding; // Add this line
+    private RecyclerView recyclerViewClothes;
+    private ClothingAdapter clothingAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityWardrobeBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        binding = ActivityWardrobeBinding.inflate(getLayoutInflater()); // Add this line
+        setContentView(binding.getRoot()); // Change this line
 
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewClothes = binding.recyclerViewClothes; // Change this line
 
-        // Initialize your adapter with an empty list or a persistent list
-        adapter = new ListAdapter(new ArrayList<>());
-        recyclerView.setAdapter(adapter);
+        // Rest of your code remains the same
+        recyclerViewClothes.setLayoutManager(new LinearLayoutManager(this));
+        clothingAdapter = new ClothingAdapter();
+        recyclerViewClothes.setAdapter(clothingAdapter);
 
-        handleIntent(getIntent());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
-        if (intent != null && intent.hasExtra("clothing_item")) {
-            Clothing newClothing = intent.getParcelableExtra("clothing_item");
-            if (newClothing != null) {
-                adapter.addItem(newClothing.description);
-                adapter.notifyDataSetChanged();
-            }
-        }
     }
 
     @Override
     public void onResume(){
         super.onResume();
+
+        // Fetch clothing items from storage
+        getClothingItemsFromStorage();
     }
 
     public void toWardrobe(){
@@ -84,6 +71,41 @@ public class WardrobeActivity extends AppCompatActivity {
     public void toAddClothingView() {
         Intent intent = new Intent(this, CreateClothActivity.class);
         startActivity(intent);
+    }
+
+    public void getClothingItemsFromStorage() {
+        try {
+            // Fetching the stored data
+            SharedPreferences sharedPreferences = getSharedPreferences("FashMeData", MODE_PRIVATE);
+            String serializedObject = sharedPreferences.getString("Wardrobe", null);
+
+            if (serializedObject == null) {
+                System.out.println("No data stored in SharedPreferences");
+                return;
+            }
+
+            // Decode the string to a byte array
+            byte[] bytes = Base64.decode(serializedObject, Base64.DEFAULT);
+
+            if (bytes == null) {
+                System.out.println("Error decoding the byte array");
+                return;
+            }
+
+            // Deserialize the byte array to an object
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+            Wardrobe wardrobe = (Wardrobe) objectInputStream.readObject();
+
+            // Update the RecyclerView adapter with the clothing items
+            if (wardrobe != null) {
+                clothingAdapter.setClothingList(wardrobe.getClothes());
+                clothingAdapter.notifyDataSetChanged();
+            }
+
+        } catch (Exception e) {
+            System.out.println("Could not read storage: " + e.getMessage());
+        }
     }
 
     public void homeClick(View view){

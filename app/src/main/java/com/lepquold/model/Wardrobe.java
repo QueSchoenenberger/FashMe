@@ -13,4 +13,8 @@ public class Wardrobe {
     public Wardrobe(List<Clothing> clothes) {
         this.clothes = clothes;
     }
+
+    public void addItem(Clothing clothing) {
+        clothes.add(clothing);
+    }
 }

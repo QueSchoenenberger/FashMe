@@ -44,48 +44,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        try {
-            SharedPreferences sharedPreferences = getSharedPreferences("FashMeData", MODE_PRIVATE);
-            SharedPreferences.Editor myEdit = sharedPreferences.edit();
-
-            // Serialize the Wardrobe
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-            objectOutputStream.writeObject(new Wardrobe(null));
-            objectOutputStream.close();
-
-            String serializedWardrobe = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-
-            // write all the data entered by the user in SharedPreference and apply
-            myEdit.putString("Wardrobe", serializedWardrobe);
-            myEdit.apply();
-        } catch (Exception e){
-            System.out.println("abc");
-        }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        try {
-            // Fetching the stored data
-            SharedPreferences sharedPreferences = getSharedPreferences("FashMeData", MODE_PRIVATE);
-            String serializedObject = sharedPreferences.getString("Wardrobe", null);
-
-            // Decode the string to a byte array
-            byte[] bytes = Base64.decode(serializedObject, Base64.DEFAULT);
-
-            // Deserialize the byte array to an object
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-            Wardrobe wardrobe = (Wardrobe) objectInputStream.readObject();
-
-
-        } catch (Exception e) {
-            System.out.println("abc");
-        }
-
     }
 
     public void toWardrobe(){

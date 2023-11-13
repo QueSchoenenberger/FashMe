@@ -22,6 +22,26 @@ public class Clothing implements Parcelable {
         this.type = type;
     }
 
+    protected Clothing(Parcel in) {
+        clothingID = in.readInt();
+        name = in.readString();
+        description = in.readString();
+        temperature = in.readDouble();
+        isWaterProof = in.readByte() != 0;
+    }
+
+    public static final Creator<Clothing> CREATOR = new Creator<Clothing>() {
+        @Override
+        public Clothing createFromParcel(Parcel in) {
+            return new Clothing(in);
+        }
+
+        @Override
+        public Clothing[] newArray(int size) {
+            return new Clothing[size];
+        }
+    };
+
     @Override
     public int describeContents() {
         return 0;
@@ -29,6 +49,10 @@ public class Clothing implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-
+        dest.writeInt(clothingID);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeDouble(temperature);
+        dest.writeByte((byte) (isWaterProof ? 1 : 0));
     }
 }

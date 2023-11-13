@@ -3,8 +3,10 @@ package com.lepquold;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -12,16 +14,16 @@ import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.google.android.material.slider.Slider;
-import com.lepquold.databinding.ActivityCreateClothBinding;
-import com.lepquold.databinding.ActivityMainBinding;
 import com.lepquold.model.BodyParts;
 import com.lepquold.model.Clothing;
 import com.lepquold.model.Style;
 import com.lepquold.model.Type;
+import com.lepquold.model.Wardrobe;
 
-import com.lepquold.helper.ListAdapter;
-
-import java.util.ArrayList;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class CreateClothActivity extends AppCompatActivity {
 
@@ -79,16 +81,69 @@ public class CreateClothActivity extends AppCompatActivity {
         boolean waterproof = switch1.isActivated();
 
         Slider slider = (Slider) findViewById(R.id.slider);
-        Float temperture = slider.getValue();
+        float temperture = slider.getValue();
 
         Type tshirt = new Type(type, BodyParts.TORSO);
         Style styleStyle = new Style(style);
 
-        Clothing c = new Clothing(discription,temperture.doubleValue(),waterproof,styleStyle,tshirt);
+        Clothing c = new Clothing(discription, (double) temperture,waterproof,styleStyle,tshirt);
 
+        persistClothingItem(c);
         // Add item
         Intent intent = new Intent(this, WardrobeActivity.class);
-        intent.putExtra("clothing_item", c);
+
         startActivity(intent);
+    }
+
+    public void persistClothingItem(Clothing clothing) {
+        try {
+            // Fetching the stored data
+            SharedPreferences sharedPreferences = getSharedPreferences("FashMeData", MODE_PRIVATE);
+            String serializedObject = sharedPreferences.getString("Wardrobe", null);
+
+            if (serializedObject == null) {
+                System.out.println("No data stored in SharedPreferences");
+                Wardrobe newWardrobe = new Wardrobe(null);
+                newWardrobe.addItem(clothing);
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+                objectOutputStream.writeObject(newWardrobe);
+                objectOutputStream.close();
+            } else {
+                // Decode the string to a byte array
+                byte[] bytes = Base64.decode(serializedObject, Base64.DEFAULT);
+
+                if (bytes == null) {
+                    System.out.println("Error decoding the byte array");
+                    return;
+                }
+
+                // Deserialize the byte array to an object
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+                ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+                Wardrobe wardrobe = (Wardrobe) objectInputStream.readObject();
+
+                // Update the RecyclerView adapter with the clothing items
+                wardrobe.addItem(clothing);
+                SharedPreferences.Editor myEdit = sharedPreferences.edit();
+
+                // Serialize the Wardrobe
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+                objectOutputStream.writeObject(wardrobe);
+                objectOutputStream.close();
+
+                String serializedWardrobe = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+
+                // write all the data entered by the user in SharedPreference and apply
+                myEdit.putString("Wardrobe", serializedWardrobe);
+                myEdit.apply();
+            }
+
+
+
+        } catch (Exception e){
+            System.out.println("Could not persist: " + e.getMessage());
+        }
     }
 }
