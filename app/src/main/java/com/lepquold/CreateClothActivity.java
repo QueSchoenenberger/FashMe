@@ -14,11 +14,13 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.google.android.material.slider.Slider;
 import com.lepquold.Types.Types;
 import com.lepquold.databinding.ActivityCreateClothBinding;
 import com.lepquold.databinding.ActivityMainBinding;
+import com.lepquold.databinding.ActivityRewievOutfitBinding;
 import com.lepquold.model.BodyParts;
 import com.lepquold.model.Clothing;
 import com.lepquold.model.Style;
@@ -35,9 +37,6 @@ public class CreateClothActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_cloth);
 
@@ -74,10 +73,9 @@ public class CreateClothActivity extends AppCompatActivity {
         toWardrobe();
     }
     public void makeErrorMessage(String error){
-     //   binding.textViewError.setText(error);
+        Toast t = Toast.makeText(this,error, Toast.LENGTH_SHORT);
+        t.show();
     }
-
-
     public void addToWardrobeClick(View view) {
         EditText editText = (EditText) findViewById(R.id.editTextDescription);
         String discription = editText.getText().toString();
