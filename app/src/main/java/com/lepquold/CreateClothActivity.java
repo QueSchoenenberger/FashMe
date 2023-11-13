@@ -27,6 +27,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 public class CreateClothActivity extends AppCompatActivity {
 
@@ -77,7 +78,7 @@ public class CreateClothActivity extends AppCompatActivity {
         EditText editText = (EditText) findViewById(R.id.editTextDescription);
         String discription = editText.getText().toString();
 
-        if (discription.length() > 1){
+        if (discription.length() < 1){
             makeErrorMessage("Clothing must have a discription");
             return;
         }
@@ -124,7 +125,6 @@ public class CreateClothActivity extends AppCompatActivity {
         persistClothingItem(c);
         // Add item
         Intent intent = new Intent(this, WardrobeActivity.class);
-        intent.putExtra("clothing_item", c);
         startActivity(intent);
     }
 
@@ -136,12 +136,18 @@ public class CreateClothActivity extends AppCompatActivity {
 
             if (serializedObject == null) {
                 System.out.println("No data stored in SharedPreferences");
-                Wardrobe newWardrobe = new Wardrobe(null);
+                Wardrobe newWardrobe = new Wardrobe(new ArrayList<>());
                 newWardrobe.addItem(clothing);
+                SharedPreferences.Editor myEdit = sharedPreferences.edit();
+
+                // Serialize the Wardrobe
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
                 objectOutputStream.writeObject(newWardrobe);
                 objectOutputStream.close();
+                String serializedWardrobe = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+                myEdit.putString("Wardrobe", serializedWardrobe);
+                myEdit.apply();
             } else {
                 // Decode the string to a byte array
                 byte[] bytes = Base64.decode(serializedObject, Base64.DEFAULT);
@@ -172,11 +178,8 @@ public class CreateClothActivity extends AppCompatActivity {
                 myEdit.putString("Wardrobe", serializedWardrobe);
                 myEdit.apply();
             }
-
-
-
         } catch (Exception e){
-            System.out.println("Could not persist: " + e.getMessage());
+            System.out.println("Could not persist: " + e);
         }
     }
 }

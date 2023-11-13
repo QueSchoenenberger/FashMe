@@ -5,7 +5,9 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-public class Clothing implements Parcelable {
+import java.io.Serializable;
+
+public class Clothing implements Parcelable, Serializable {
     private int clothingID;
     public String name;
     public String description;
