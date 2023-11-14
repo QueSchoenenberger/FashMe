@@ -15,7 +15,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.android.material.slider.Slider;
-import com.lepquold.helper.TypePopulator;
+import com.lepquold.helper.TypeManager;
 import com.lepquold.model.Clothing;
 import com.lepquold.model.Style;
 import com.lepquold.model.Type;
@@ -91,14 +91,14 @@ public class CreateClothActivity extends AppCompatActivity {
         // Get selected style from the spinner
         Spinner spinnerCreate = findViewById(R.id.styleCreate);
         String style = spinnerCreate.getSelectedItem().toString();
-        Style selectedStyle = getSelectedStyle(style);
+        Style selectedStyle = TypeManager.getSelectedStyle(style);
 
         // Get selected type from the spinner
         Spinner spinnerType = findViewById(R.id.typeCreate);
         String typeName = spinnerType.getSelectedItem().toString();
         Type selectedType;
         try {
-            selectedType = TypePopulator.getTypes().get(typeName);
+            selectedType = TypeManager.getTypes().get(typeName);
         } catch (Exception e) {
             makeErrorMessage("Error while selecting the type");
             return;
@@ -168,24 +168,6 @@ public class CreateClothActivity extends AppCompatActivity {
 
         myEdit.putString("Wardrobe", serializedWardrobe);
         myEdit.apply();
-    }
-
-    // Method to get the selected style based on the spinner selection
-    private Style getSelectedStyle(String styleString){
-        switch (styleString) {
-            case "Formal-Business":
-                return Style.FormalBusiness;
-            case "Smart-Casual":
-                return Style.SmartCasual;
-            case "Leger":
-                return Style.Leger;
-            case "Sportive":
-                return Style.Sportive;
-            case "Vintage":
-                return Style.Vintage;
-            default:
-                return Style.Casual;
-        }
     }
 
     // Method to update the wardrobe with a new clothing item

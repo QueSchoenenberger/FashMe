@@ -1,14 +1,15 @@
 package com.lepquold.helper;
 
 import com.lepquold.model.BodyParts;
+import com.lepquold.model.Style;
 import com.lepquold.model.Type;
 
 import java.util.HashMap;
 
 /**
- * Helper class for populating clothing types.
+ * Helper class for types.
  */
-public class TypePopulator {
+public class TypeManager {
 
     /**
      * Get a HashMap containing predefined clothing types.
@@ -26,4 +27,24 @@ public class TypePopulator {
         types.put("Shoe", new Type("Shoe", BodyParts.FEET));
         return types;
     }
+    // Method to get the selected style based on the spinner selection
+    public static Style getSelectedStyle(String input){
+        switch (input) {
+            case "Formal-Business":
+                return Style.FormalBusiness;
+            case "Smart-Casual":
+                return Style.SmartCasual;
+            case "Leger":
+                return Style.Leger;
+            case "Sportive":
+                return Style.Sportive;
+            case "Vintage":
+                return Style.Vintage;
+            default:
+                return Style.Casual;
+        }
+    }
+
+
+
 }

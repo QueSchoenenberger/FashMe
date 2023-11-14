@@ -100,12 +100,9 @@ public class OutfitGeneratorService {
             boolean isWaterproof = clothing.isWaterProof();
             double clothingTemperature = clothing.getTemperature();
 
-            if (isRaining && !isWaterproof) {
-                continue;
-            }
-
-            if (clothingTemperature >= (temperature - 10) && clothingTemperature <= (temperature + 10) &&
-                    clothing.getStyle() == style) {
+            // Hier wurde die Bedingung angepasst
+            if ((isRaining && isWaterproof) || (!isRaining && clothingTemperature >= (temperature - 10) &&
+                    clothingTemperature <= (temperature + 10) && clothing.getStyle() == style)) {
                 filtered.add(clothing);
             }
         }

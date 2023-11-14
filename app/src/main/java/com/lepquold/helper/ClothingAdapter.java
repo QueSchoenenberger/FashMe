@@ -44,7 +44,7 @@ public class ClothingAdapter extends RecyclerView.Adapter<ClothingAdapter.Clothi
     public void onBindViewHolder(@NonNull ClothingViewHolder holder, int position) {
         // Bind data to views for each clothing item
         Clothing clothing = clothingList.get(position);
-        holder.descriptionTextView.setText(clothing.description);
+        holder.descriptionTextView.setText(clothing.getDescription());
     }
 
     // Return the size of your dataset (invoked by the layout manager)

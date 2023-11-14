@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.lepquold.databinding.ActivityRewievOutfitBinding;
 import com.lepquold.helper.ClothingAdapter;
+import com.lepquold.helper.TypeManager;
 import com.lepquold.model.Outfit;
 import com.lepquold.model.OutfitRequest;
 import com.lepquold.model.Style;
@@ -64,7 +65,7 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
         boolean isRaining = weatherInfo.isRaining();
 
 
-        Style selectedStyle = getSelectedStyle(styleString);
+        Style selectedStyle = TypeManager.getSelectedStyle(styleString);
 
         List<Outfit> generatedOutfits = getOutfits(temperature, isRaining, selectedStyle);
 
@@ -237,23 +238,6 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
     public void reloadClick(View view) {
         outfitCount++;
         onResume();
-    }
-
-    private Style getSelectedStyle(String styleString){
-        switch (styleString) {
-            case "Formal-Business":
-                return Style.FormalBusiness;
-            case "Smart-Casual":
-                return Style.SmartCasual;
-            case "Leger":
-                return Style.Leger;
-            case "Sportive":
-                return Style.Sportive;
-            case "Vintage":
-                return Style.Vintage;
-            default:
-                return Style.Casual;
-        }
     }
 
     private List<Outfit> getOutfits(double temperature, boolean isRaining, Style selectedStyle) {

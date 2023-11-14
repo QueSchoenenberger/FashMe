@@ -2,7 +2,7 @@ package com.lepquold.service;
 
 import static org.junit.Assert.*;
 
-import com.lepquold.helper.TypePopulator;
+import com.lepquold.helper.TypeManager;
 import com.lepquold.model.Clothing;
 import com.lepquold.model.Outfit;
 import com.lepquold.model.OutfitRequest;
@@ -21,10 +21,10 @@ public class OutfitGeneratorServiceTest {
     public void generateOutfits() {
         // Set up clothing items
         Style casual = Style.Casual;
-        Type tshirtType = TypePopulator.getTypes().get("T-Shirt");
-        Type pantsType = TypePopulator.getTypes().get("Pants");
-        Type shoeType = TypePopulator.getTypes().get("Shoe");
-        Type hatType = TypePopulator.getTypes().get("Hat");
+        Type tshirtType = TypeManager.getTypes().get("T-Shirt");
+        Type pantsType = TypeManager.getTypes().get("Pants");
+        Type shoeType = TypeManager.getTypes().get("Shoe");
+        Type hatType = TypeManager.getTypes().get("Hat");
 
         Clothing tshirt = new Clothing("white T-Shirt", 23.00, false, casual, tshirtType);
         Clothing tshirt2 = new Clothing("green T-Shirt", 25.00, false, casual, tshirtType);
