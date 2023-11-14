@@ -99,16 +99,30 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
         showDetails(location, isRaining, styleString, temperature);
     }
 
+    /**
+     * Displays weather and style details on the user interface.
+     *
+     * @param location      The location for which the weather details are displayed.
+     * @param isRaining     A boolean indicating whether it's raining at the specified location.
+     * @param styleString   The style information to be displayed.
+     * @param temperature   The temperature to be displayed in Celsius.
+     */
     public void showDetails(String location, boolean isRaining, String styleString, double temperature){
+        // Set the location, temperature, and style information on the UI
         binding.textViewOrt.setText(location);
         binding.textViewGrad.setText(Math.round(temperature) + "°C");
+
+        // Set the rain status based on the isRaining boolean
         if (isRaining) {
             binding.textViewRegen.setText("It's Raining");
         } else {
             binding.textViewRegen.setText("It's Dry");
         }
+
+        // Set the clothing style information on the UI
         binding.textViewStyle.setText(styleString);
     }
+
     /**
      * Callback method triggered when there is an error in the weather API call.
      *
@@ -118,7 +132,7 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
     @Override
     public void onWeatherApiError(Exception e) {
         // Display a toast message indicating the weather data request error
-        Toast t = Toast.makeText(this, "Error while asking for weather data", Toast.LENGTH_SHORT);
+        Toast t = Toast.makeText(this, "Error while asking for weather data, Please enter a valid location", Toast.LENGTH_SHORT);
         t.show();
 
         // Navigate to the FashMe activity
