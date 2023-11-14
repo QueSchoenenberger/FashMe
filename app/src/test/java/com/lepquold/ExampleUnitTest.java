@@ -1,18 +1,10 @@
 package com.lepquold;
 
 import org.junit.Test;
-
 import static org.junit.Assert.*;
 
 import com.lepquold.helper.TypePopulator;
-import com.lepquold.model.BodyParts;
-import com.lepquold.model.Clothing;
-import com.lepquold.model.Outfit;
-import com.lepquold.model.OutfitRequest;
-import com.lepquold.model.Style;
-import com.lepquold.model.Type;
-import com.lepquold.model.Wardrobe;
-import com.lepquold.model.WeatherInfo;
+import com.lepquold.model.*;
 import com.lepquold.service.OutfitGeneratorService;
 import com.lepquold.service.WeatherService;
 
@@ -20,10 +12,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ExampleUnitTest {
+
     @Test
     public void generateOutfit_generates_correct_outfit() {
+        // Set up clothing items
         Style casual = Style.Casual;
         Type tshirtType = TypePopulator.getTypes().get("T-Shirt");
         Type pantsType = TypePopulator.getTypes().get("Pants");
@@ -38,6 +31,7 @@ public class ExampleUnitTest {
         Clothing jeans2 = new Clothing("ripped jeans", 24.00, false, casual, pantsType);
         Clothing hat = new Clothing("black hat", 25.00, false, casual, hatType);
 
+        // Create a wardrobe with the clothing items
         List<Clothing> clothes = new ArrayList<>();
         clothes.add(tshirt);
         clothes.add(tshirt2);
@@ -48,18 +42,28 @@ public class ExampleUnitTest {
         clothes.add(hat);
 
         Wardrobe wardrobe = new Wardrobe(clothes);
-        OutfitRequest request = new OutfitRequest(20.00,false,Style.Casual);
 
+        // Create an outfit request
+        OutfitRequest request = new OutfitRequest(20.00, false, Style.Casual);
+
+        // Generate outfits
         OutfitGeneratorService service = new OutfitGeneratorService();
+        List<Outfit> outfits = service.generateOutfits(request, wardrobe, Style.Casual);
 
-        List<Outfit> outfits = service.generateOutfits(request, wardrobe,Style.Casual);
-        System.out.println(outfits);
+        // Perform assertions or validations based on the expected outcome
+        assertNotNull(outfits);
+        assertFalse(outfits.isEmpty());
+        System.out.println(outfits); // Print the generated outfits
     }
 
     @Test
     public void getTemperatureOfLocation() throws IOException {
+        // Test fetching temperature and rain status for a location
         WeatherService service = new WeatherService();
         WeatherInfo info = service.getTemperatureAndRainStatus("Zuerich");
-        System.out.println(info.getTemperature() + "\n" + info.isRaining());
+
+        // Perform assertions or validations based on the expected outcome
+        assertNotNull(info);
+        System.out.println(info.getTemperature() + "\n" + info.isRaining()); // Print the temperature and rain status
     }
 }
