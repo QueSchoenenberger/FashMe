@@ -6,12 +6,27 @@ import com.lepquold.model.WeatherInfo;
 
 import java.io.IOException;
 
+/**
+ * AsyncTask for making asynchronous weather API calls.
+ */
 public class WeatherApiTask extends AsyncTask<String, Void, WeatherInfo> {
     private WeatherInfoListener listener;
 
+    /**
+     * Constructor for WeatherApiTask.
+     *
+     * @param listener The listener to handle weather information callbacks.
+     */
     public WeatherApiTask(WeatherInfoListener listener) {
         this.listener = listener;
     }
+
+    /**
+     * Background task to fetch weather information from the API.
+     *
+     * @param locations The location(s) for which weather information is requested.
+     * @return          The fetched weather information.
+     */
     @Override
     protected WeatherInfo doInBackground(String... locations) {
         try {
@@ -24,6 +39,11 @@ public class WeatherApiTask extends AsyncTask<String, Void, WeatherInfo> {
         }
     }
 
+    /**
+     * Executed on the UI thread after the background task is complete.
+     *
+     * @param result The result of the background task, i.e., the weather information.
+     */
     @Override
     protected void onPostExecute(WeatherInfo result) {
         if (result != null) {

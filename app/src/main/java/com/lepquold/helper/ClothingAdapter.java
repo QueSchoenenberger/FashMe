@@ -14,6 +14,9 @@ import com.lepquold.model.Clothing;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter class for displaying a list of clothing items in a RecyclerView.
+ */
 public class ClothingAdapter extends RecyclerView.Adapter<ClothingAdapter.ClothingViewHolder> {
     private List<Clothing> clothingList = new ArrayList<>();
 

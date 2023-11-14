@@ -13,12 +13,22 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Service class responsible for interacting with the OpenWeatherMap API to retrieve weather information.
+ */
 public class WeatherService {
 
     private static final String GEOCODING_API_URL = "https://api.openweathermap.org/geo/1.0/direct";
     private static final String WEATHER_API_URL = "https://api.openweathermap.org/data/2.5/weather";
     private static final String API_KEY = "02bbb8486b3214186caf10ca41f9defe";
 
+    /**
+     * Retrieves temperature and rain status for the specified location.
+     *
+     * @param location The location for which weather information is requested.
+     * @return         Weather information for the specified location.
+     * @throws IOException If an error occurs during the API call.
+     */
     public WeatherInfo getTemperatureAndRainStatus(String location) throws IOException {
         Geocoding geocoding = getGeocoding(location);
         if (geocoding != null) {
@@ -41,6 +51,13 @@ public class WeatherService {
         return null;
     }
 
+    /**
+     * Retrieves geocoding information for the specified location.
+     *
+     * @param location The location for which geocoding information is requested.
+     * @return         Geocoding information for the specified location.
+     * @throws IOException If an error occurs during the API call.
+     */
     private Geocoding getGeocoding(String location) throws IOException {
         URL url = new URL(GEOCODING_API_URL + "?q=" + location + "&limit=1&appid=" + API_KEY);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -59,6 +76,12 @@ public class WeatherService {
         }
     }
 
+    /**
+     * Parses the geocoding information from the JSON response.
+     *
+     * @param jsonResponse The JSON response containing geocoding information.
+     * @return             Geocoding information parsed from the JSON response.
+     */
     private Geocoding parseGeocoding(String jsonResponse) {
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
@@ -79,6 +102,12 @@ public class WeatherService {
         }
     }
 
+    /**
+     * Parses the weather information from the JSON response.
+     *
+     * @param jsonResponse The JSON response containing weather information.
+     * @return             Weather information parsed from the JSON response.
+     */
     private WeatherInfo parseWeatherInfo(String jsonResponse) {
         try {
             JSONObject response = new JSONObject(jsonResponse);

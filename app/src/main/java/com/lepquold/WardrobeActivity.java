@@ -14,31 +14,30 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lepquold.databinding.ActivityWardrobeBinding;
 import com.lepquold.helper.ClothingAdapter;
-import com.lepquold.model.Clothing;
 import com.lepquold.model.Wardrobe;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
 
+/**
+ * Activity responsible for displaying the user's wardrobe and allowing the user to navigate to other features.
+ */
 public class WardrobeActivity extends AppCompatActivity {
-    private ActivityWardrobeBinding binding; // Add this line
+    private ActivityWardrobeBinding binding;
     private RecyclerView recyclerViewClothes;
     private ClothingAdapter clothingAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityWardrobeBinding.inflate(getLayoutInflater()); // Add this line
-        setContentView(binding.getRoot()); // Change this line
+        binding = ActivityWardrobeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        recyclerViewClothes = binding.recyclerViewClothes; // Change this line
+        recyclerViewClothes = binding.recyclerViewClothes;
 
-        // Rest of your code remains the same
         recyclerViewClothes.setLayoutManager(new LinearLayoutManager(this));
         clothingAdapter = new ClothingAdapter();
         recyclerViewClothes.setAdapter(clothingAdapter);
-
     }
 
     @Override
@@ -48,31 +47,48 @@ public class WardrobeActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
         // Fetch clothing items from storage
         getClothingItemsFromStorage();
     }
 
-    public void toWardrobe(){
-        Intent intent = new Intent(this,WardrobeActivity.class);
-        startActivity(intent);
-    }
-    public void toHome(){
-        Intent intent = new Intent(this,MainActivity.class);
-        startActivity(intent);
-    }
-    public void toFashMe(){
-        Intent intent = new Intent(this,GenerateOutfitActivity.class);
+    /**
+     * Navigates to the Wardrobe activity.
+     */
+    public void toWardrobe() {
+        Intent intent = new Intent(this, WardrobeActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Navigates to the Home activity.
+     */
+    public void toHome() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Navigates to the GenerateOutfit activity.
+     */
+    public void toFashMe() {
+        Intent intent = new Intent(this, GenerateOutfitActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Navigates to the CreateClothActivity to add new clothing items.
+     */
     public void toAddClothingView() {
         Intent intent = new Intent(this, CreateClothActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * Fetches clothing items from storage and updates the RecyclerView adapter.
+     */
     public void getClothingItemsFromStorage() {
         try {
             // Fetching the stored data
@@ -108,15 +124,38 @@ public class WardrobeActivity extends AppCompatActivity {
         }
     }
 
-    public void homeClick(View view){
+    /**
+     * Click handler for the Home button.
+     *
+     * @param view The clicked view.
+     */
+    public void homeClick(View view) {
         toHome();
     }
-    public void fashMeClick(View view){
+
+    /**
+     * Click handler for the FashMe button.
+     *
+     * @param view The clicked view.
+     */
+    public void fashMeClick(View view) {
         toFashMe();
     }
-    public void wardrobeClick(View view){
+
+    /**
+     * Click handler for the Wardrobe button.
+     *
+     * @param view The clicked view.
+     */
+    public void wardrobeClick(View view) {
         toWardrobe();
     }
+
+    /**
+     * Click handler for the Add Clothing button, which navigates to the CreateClothActivity.
+     *
+     * @param view The clicked view.
+     */
     public void buttonClick(View view) {
         toAddClothingView();
     }

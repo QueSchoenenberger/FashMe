@@ -10,51 +10,64 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.lepquold.model.Style;
 
+/**
+ * Activity for generating outfit suggestions based on user input.
+ */
 public class GenerateOutfitActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generate_outfit);
-        Spinner type = findViewById(R.id.styleSpinner);
-        ArrayAdapter<CharSequence> adapterType = ArrayAdapter.createFromResource(this, R.array.style, android.R.layout.simple_spinner_item);
-        adapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        type.setAdapter(adapterType);
+
+        // Initialize spinner for style selection
+        Spinner styleSpinner = findViewById(R.id.styleSpinner);
+        ArrayAdapter<CharSequence> adapterStyle = ArrayAdapter.createFromResource(this, R.array.style, android.R.layout.simple_spinner_item);
+        adapterStyle.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        styleSpinner.setAdapter(adapterStyle);
     }
-    public void toWardrobe(){
-        Intent intent = new Intent(this,WardrobeActivity.class);
-        startActivity(intent);
-    }
-    public void toHome(){
-        Intent intent = new Intent(this,MainActivity.class);
+
+    // Navigation methods
+    public void toWardrobe() {
+        Intent intent = new Intent(this, WardrobeActivity.class);
         startActivity(intent);
     }
 
-    public void homeClick(View view){
+    public void toHome() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    // Click handlers for navigation
+    public void homeClick(View view) {
         toHome();
     }
-    public void fashMeClick(View view){
-    }
-    public void wardrobeClick(View view){
+
+    public void wardrobeClick(View view) {
         toWardrobe();
     }
 
+    // Click handler for generating outfit suggestions
     public void fashMeCLick(View view) {
-        TextInputEditText inputStandort = (TextInputEditText) findViewById(R.id.StandortInput);
-        String Standort = inputStandort.getText().toString();
-        if (Standort.length() < 1){
-            Toast t = Toast.makeText(this,"Bitte gibt einen Standort ein", Toast.LENGTH_SHORT);
+        TextInputEditText inputStandort = findViewById(R.id.StandortInput);
+        String standort = inputStandort.getText().toString();
+
+        // Check if location is provided
+        if (standort.length() < 1) {
+            Toast t = Toast.makeText(this, "Please enter a location", Toast.LENGTH_SHORT);
             t.show();
             return;
         }
 
-        Spinner styleSpinner = (Spinner) findViewById(R.id.styleSpinner);
+        // Get selected style from the spinner
+        Spinner styleSpinner = findViewById(R.id.styleSpinner);
         String style = styleSpinner.getSelectedItem().toString();
-        Intent intent = new Intent(this,RewievOutfitActivity.class);
-        intent.putExtra("location",Standort);
-        intent.putExtra("style",style);
+
+        // Start the ReviewOutfitActivity with location and style information
+        Intent intent = new Intent(this, RewievOutfitActivity.class);
+        intent.putExtra("location", standort);
+        intent.putExtra("style", style);
         startActivity(intent);
     }
 }

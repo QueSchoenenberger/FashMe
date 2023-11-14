@@ -10,11 +10,25 @@ import com.lepquold.model.Wardrobe;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service class responsible for generating outfits based on user preferences,
+ * wardrobe contents, and weather conditions.
+ */
 public class OutfitGeneratorService {
+
+    /**
+     * Generates a list of outfits based on the provided request, wardrobe, and style.
+     *
+     * @param request   The outfit request containing temperature, raining status, etc.
+     * @param wardrobe  The wardrobe containing available clothing items.
+     * @param style     The desired style for the outfits.
+     * @return          A list of generated outfits.
+     */
     public List<Outfit> generateOutfits(OutfitRequest request, Wardrobe wardrobe, Style style) {
         List<Clothing> filteredClothes = filterClothes(request.getTemperature(), request.isRaining(), style, wardrobe.getClothes());
         List<Outfit> outfits = new ArrayList<>();
 
+        // Separate clothes based on type and body part
         List<Clothing> headClothes = new ArrayList<>();
         List<Clothing> faceClothes = new ArrayList<>();
         List<Clothing> torsoClothes = new ArrayList<>();
@@ -22,7 +36,6 @@ public class OutfitGeneratorService {
         List<Clothing> feetClothes = new ArrayList<>();
         List<Clothing> hatClothes = new ArrayList<>();
 
-        // Separate clothes based on type and body part
         for (Clothing clothing : filteredClothes) {
             if (clothing.type.bodyPart == BodyParts.HEAD) {
                 headClothes.add(clothing);
@@ -71,6 +84,15 @@ public class OutfitGeneratorService {
         return outfits;
     }
 
+    /**
+     * Filters the list of clothes based on temperature, raining status, and style.
+     *
+     * @param temperature   The current temperature.
+     * @param isRaining     Indicates whether it is raining.
+     * @param style         The desired style.
+     * @param clothes       The list of available clothing items.
+     * @return              The filtered list of clothes.
+     */
     private List<Clothing> filterClothes(double temperature, boolean isRaining, Style style, List<Clothing> clothes) {
         List<Clothing> filtered = new ArrayList<>();
 
