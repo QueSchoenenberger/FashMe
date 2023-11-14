@@ -10,7 +10,7 @@ import java.io.IOException;
  * AsyncTask for making asynchronous weather API calls.
  */
 public class WeatherApiTask extends AsyncTask<String, Void, WeatherInfo> {
-    private WeatherInfoListener listener;
+    private final WeatherInfoListener listener;
 
     /**
      * Constructor for WeatherApiTask.

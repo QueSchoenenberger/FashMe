@@ -8,13 +8,12 @@ import androidx.annotation.NonNull;
 import java.io.Serializable;
 
 public class Clothing implements Parcelable, Serializable {
-    private int clothingID;
-    public String name;
-    public String description;
-    public double temperature;
-    public boolean isWaterProof;
-    public Style style;
-    public Type type;
+    private String name;
+    private String description;
+     double temperature;
+    private boolean isWaterProof;
+    private Style style;
+    private Type type;
 
     public Clothing(String description, double temperature, boolean isWaterProof, Style style, Type type) {
         this.description = description;
@@ -25,7 +24,6 @@ public class Clothing implements Parcelable, Serializable {
     }
 
     protected Clothing(Parcel in) {
-        clothingID = in.readInt();
         name = in.readString();
         description = in.readString();
         temperature = in.readDouble();
@@ -51,10 +49,57 @@ public class Clothing implements Parcelable, Serializable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeInt(clothingID);
         dest.writeString(name);
         dest.writeString(description);
         dest.writeDouble(temperature);
         dest.writeByte((byte) (isWaterProof ? 1 : 0));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public boolean isWaterProof() {
+        return isWaterProof;
+    }
+
+    public Style getStyle() {
+        return style;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
+
+    public void setWaterProof(boolean waterProof) {
+        isWaterProof = waterProof;
+    }
+
+    public void setStyle(Style style) {
+        this.style = style;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 }

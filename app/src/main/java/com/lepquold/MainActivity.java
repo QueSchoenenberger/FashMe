@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void toHome() {
         // Optional: You're already in the MainActivity, so you might not need to navigate to it again.
-        // This method is here for consistency with your other navigation methods.
+        // This method is here for consistency with the other navigation methods.
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

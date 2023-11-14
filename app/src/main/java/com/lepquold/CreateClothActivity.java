@@ -2,6 +2,7 @@ package com.lepquold;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.lepquold.model.Wardrobe;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -37,15 +39,8 @@ public class CreateClothActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_cloth);
 
         // Initialize spinners for type and style selection
-        Spinner type = findViewById(R.id.typeCreate);
-        ArrayAdapter<CharSequence> adapterType = ArrayAdapter.createFromResource(this, R.array.type, android.R.layout.simple_spinner_item);
-        adapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        type.setAdapter(adapterType);
-
-        Spinner style = findViewById(R.id.styleCreate);
-        ArrayAdapter<CharSequence> adapterStyle = ArrayAdapter.createFromResource(this, R.array.style, android.R.layout.simple_spinner_item);
-        adapterStyle.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        style.setAdapter(adapterStyle);
+        initialiseSpinner();
+        initialiseStyleSelection();
     }
 
     // Navigation methods
@@ -94,29 +89,9 @@ public class CreateClothActivity extends AppCompatActivity {
         }
 
         // Get selected style from the spinner
-        Style selectedStyle = Style.Casual;
         Spinner spinnerCreate = findViewById(R.id.styleCreate);
         String style = spinnerCreate.getSelectedItem().toString();
-        switch (style) {
-            case "Casual":
-                selectedStyle = Style.Casual;
-                break;
-            case "Formal-Business":
-                selectedStyle = Style.FormellBusiness;
-                break;
-            case "Smart-Casual":
-                selectedStyle = Style.SmartCasual;
-                break;
-            case "Leger":
-                selectedStyle = Style.Leger;
-                break;
-            case "Sportive":
-                selectedStyle = Style.Sportive;
-                break;
-            case "Vintage":
-                selectedStyle = Style.Vintage;
-                break;
-        }
+        Style selectedStyle = getSelectedStyle(style);
 
         // Get selected type from the spinner
         Spinner spinnerType = findViewById(R.id.typeCreate);
@@ -130,15 +105,15 @@ public class CreateClothActivity extends AppCompatActivity {
         }
 
         // Get waterproof status from the switch
-        Switch waterproofSwitch = findViewById(R.id.switch1);
+        @SuppressLint("UseSwitchCompatOrMaterialCode") Switch waterproofSwitch = findViewById(R.id.switch1);
         boolean waterproof = waterproofSwitch.isChecked();
 
         // Get temperature from the slider
         Slider slider = findViewById(R.id.slider);
-        Float temperature = slider.getValue();
+        double temperature = slider.getValue();
 
         // Create a new clothing object
-        Clothing newClothing = new Clothing(description, temperature.doubleValue(), waterproof, selectedStyle, selectedType);
+        Clothing newClothing = new Clothing(description, temperature, waterproof, selectedStyle, selectedType);
 
         // Persist the new clothing item
         persistClothingItem(newClothing);
@@ -156,50 +131,100 @@ public class CreateClothActivity extends AppCompatActivity {
 
             if (serializedObject == null) {
                 // If no data is stored, create a new wardrobe and add the item
-                Wardrobe newWardrobe = new Wardrobe(new ArrayList<>());
-                newWardrobe.addItem(clothing);
-                SharedPreferences.Editor myEdit = sharedPreferences.edit();
-
-                // Serialize the Wardrobe
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-                objectOutputStream.writeObject(newWardrobe);
-                objectOutputStream.close();
-                String serializedWardrobe = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-                myEdit.putString("Wardrobe", serializedWardrobe);
-                myEdit.apply();
+                initialiseWardrobe(clothing, sharedPreferences);
             } else {
                 // If data is stored, deserialize and update the wardrobe
-                byte[] bytes = Base64.decode(serializedObject, Base64.DEFAULT);
-
-                if (bytes == null) {
-                    System.out.println("Error decoding the byte array");
-                    return;
-                }
-
-                // Deserialize the byte array to a Wardrobe object
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-                ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-                Wardrobe wardrobe = (Wardrobe) objectInputStream.readObject();
-
-                // Update the RecyclerView adapter with the clothing items
-                wardrobe.addItem(clothing);
-                SharedPreferences.Editor myEdit = sharedPreferences.edit();
-
-                // Serialize the updated Wardrobe
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-                objectOutputStream.writeObject(wardrobe);
-                objectOutputStream.close();
-
-                String serializedWardrobe = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
-
-                // Write all the data entered by the user in SharedPreferences and apply
-                myEdit.putString("Wardrobe", serializedWardrobe);
-                myEdit.apply();
+                updateWardrobe(clothing, sharedPreferences, serializedObject);
             }
         } catch (Exception e) {
             System.out.println("Could not persist: " + e);
         }
+    }
+
+    // Method to initialize the type spinner
+    private void initialiseSpinner() {
+        Spinner type = findViewById(R.id.typeCreate);
+        ArrayAdapter<CharSequence> adapterType = ArrayAdapter.createFromResource(this, R.array.type, android.R.layout.simple_spinner_item);
+        adapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        type.setAdapter(adapterType);
+    }
+
+    // Method to initialize the style spinner
+    private void initialiseStyleSelection() {
+        Spinner style = findViewById(R.id.styleCreate);
+        ArrayAdapter<CharSequence> adapterStyle = ArrayAdapter.createFromResource(this, R.array.style, android.R.layout.simple_spinner_item);
+        adapterStyle.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        style.setAdapter(adapterStyle);
+    }
+
+    // Method to initialize the wardrobe with a new clothing item
+    private void initialiseWardrobe(Clothing clothingItem, SharedPreferences sharedPreferences) throws IOException {
+        Wardrobe newWardrobe = new Wardrobe(new ArrayList<>());
+        newWardrobe.addItem(clothingItem);
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+
+        // Serialize the Wardrobe
+        String serializedWardrobe = getSerializedWardrobe(newWardrobe);
+
+        myEdit.putString("Wardrobe", serializedWardrobe);
+        myEdit.apply();
+    }
+
+    // Method to get the selected style based on the spinner selection
+    private Style getSelectedStyle(String styleString){
+        switch (styleString) {
+            case "Formal-Business":
+                return Style.FormalBusiness;
+            case "Smart-Casual":
+                return Style.SmartCasual;
+            case "Leger":
+                return Style.Leger;
+            case "Sportive":
+                return Style.Sportive;
+            case "Vintage":
+                return Style.Vintage;
+            default:
+                return Style.Casual;
+        }
+    }
+
+    // Method to update the wardrobe with a new clothing item
+    private void updateWardrobe(Clothing clothingItem, SharedPreferences sharedPreferences, String serializedObject) throws IOException, ClassNotFoundException {
+        byte[] bytes = Base64.decode(serializedObject, Base64.DEFAULT);
+
+        if (bytes == null) {
+            System.out.println("Error decoding the byte array");
+            return;
+        }
+
+        // Deserialize the byte array to a Wardrobe object
+        Wardrobe wardrobe = getWardrobeFromByteArray(bytes);
+
+        // Update the RecyclerView adapter with the clothing items
+        wardrobe.addItem(clothingItem);
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+
+        // Serialize the updated Wardrobe
+        String serializedWardrobe = getSerializedWardrobe(wardrobe);
+
+        // Write all the data entered by the user in SharedPreferences and apply
+        myEdit.putString("Wardrobe", serializedWardrobe);
+        myEdit.apply();
+    }
+
+    // Method to get the serialized Wardrobe from a byte array
+    private String getSerializedWardrobe(Wardrobe wardrobe) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(wardrobe);
+        objectOutputStream.close();
+        return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+    }
+
+    // Method to get the Wardrobe object from a byte array
+    private Wardrobe getWardrobeFromByteArray(byte[] bytes) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        return (Wardrobe) objectInputStream.readObject();
     }
 }

@@ -2,6 +2,7 @@ package com.lepquold;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
     ClothingAdapter clothingAdapter = new ClothingAdapter();
     private ActivityRewievOutfitBinding binding;
 
-    int outfitcount;
+    int outfitCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
         binding = ActivityRewievOutfitBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        outfitcount = 0;
+        outfitCount = 0;
     }
 
     @Override
@@ -63,35 +64,14 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
         double temperature = weatherInfo.getTemperature();
         boolean isRaining = weatherInfo.isRaining();
 
-        Style selectedStyle;
-        switch (styleString) {
-            case "Formal-Business":
-                selectedStyle = Style.FormellBusiness;
-                break;
-            case "Smart-Casual":
-                selectedStyle = Style.SmartCasual;
-                break;
-            case "Leger":
-                selectedStyle = Style.Leger;
-                break;
-            case "Sportive":
-                selectedStyle = Style.Sportive;
-                break;
-            case "Vintage":
-                selectedStyle = Style.Vintage;
-                break;
-            default:
-                selectedStyle = Style.Casual;
-                break;
-        }
 
-        OutfitRequest or = new OutfitRequest(temperature, isRaining, Style.Casual);
-        OutfitGeneratorService os = new OutfitGeneratorService();
-        Wardrobe wardrobe = getClothingItemsFromStorage();
-        List<Outfit> outfits = os.generateOutfits(or, wardrobe, selectedStyle);
+        Style selectedStyle = getSelectedStyle(styleString);
 
-        if (outfits.size() > 0 && outfits.size() > outfitcount) {
-            showOutfit(outfits.get(outfitcount));
+        List<Outfit> generatedOutfits = getOutfits(temperature, isRaining, selectedStyle);
+
+
+        if (generatedOutfits.size() > 0 && generatedOutfits.size() > outfitCount) {
+            showOutfit(generatedOutfits.get(outfitCount));
         } else {
             Toast t = Toast.makeText(this, "No suitable outfit found", Toast.LENGTH_SHORT);
             t.show();
@@ -99,6 +79,7 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
         showDetails(location, isRaining, styleString, temperature);
     }
 
+    @SuppressLint("SetTextI18n")
     public void showDetails(String location, boolean isRaining, String styleString, double temperature){
         binding.textViewOrt.setText(location);
         binding.textViewGrad.setText(Math.round(temperature) + "°C");
@@ -133,14 +114,14 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
      *
      */
     public void showOutfit(Outfit outfit) {
-        binding.textViewTursor.setText(outfit.getClothingForTorso().description);
-        binding.textViewFeet.setText(outfit.getClothingForFeet().description);
-        binding.textViewLeg.setText(outfit.getClothingForLegs().description);
+        binding.textViewTursor.setText(outfit.getClothingForTorso().getDescription());
+        binding.textViewFeet.setText(outfit.getClothingForFeet().getDescription());
+        binding.textViewLeg.setText(outfit.getClothingForLegs().getDescription());
         if (outfit.getClothingForHead() != null) {
-            binding.textViewHead.setText(outfit.getClothingForHead().description);
+            binding.textViewHead.setText(outfit.getClothingForHead().getDescription());
         }
         if (outfit.getClothingForFace() != null) {
-            binding.textViewFace.setText(outfit.getClothingForFace().description);
+            binding.textViewFace.setText(outfit.getClothingForFace().getDescription());
         }
     }
 
@@ -243,7 +224,31 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
      * @param view The clicked view.
      */
     public void reloadClick(View view) {
-        outfitcount++;
+        outfitCount++;
         onResume();
+    }
+
+    private Style getSelectedStyle(String styleString){
+        switch (styleString) {
+            case "Formal-Business":
+                return Style.FormalBusiness;
+            case "Smart-Casual":
+                return Style.SmartCasual;
+            case "Leger":
+                return Style.Leger;
+            case "Sportive":
+                return Style.Sportive;
+            case "Vintage":
+                return Style.Vintage;
+            default:
+                return Style.Casual;
+        }
+    }
+
+    private List<Outfit> getOutfits(double temperature, boolean isRaining, Style selectedStyle) {
+        OutfitRequest or = new OutfitRequest(temperature, isRaining, Style.Casual);
+        OutfitGeneratorService os = new OutfitGeneratorService();
+        Wardrobe wardrobe = getClothingItemsFromStorage();
+        return os.generateOutfits(or, wardrobe, selectedStyle);
     }
 }

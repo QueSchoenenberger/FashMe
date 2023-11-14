@@ -1,14 +1,13 @@
 package com.lepquold;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Base64;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +16,7 @@ import com.lepquold.helper.ClothingAdapter;
 import com.lepquold.model.Wardrobe;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 
 /**
@@ -30,14 +30,13 @@ public class WardrobeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Inflate the layout using ViewBinding
         binding = ActivityWardrobeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        recyclerViewClothes = binding.recyclerViewClothes;
-
-        recyclerViewClothes.setLayoutManager(new LinearLayoutManager(this));
-        clothingAdapter = new ClothingAdapter();
-        recyclerViewClothes.setAdapter(clothingAdapter);
+        // Initialize the RecyclerView and its adapter
+        initialiseAdapterAndRecyclerView();
     }
 
     @Override
@@ -50,7 +49,7 @@ public class WardrobeActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        // Fetch clothing items from storage
+        // Fetch clothing items from storage and update the RecyclerView adapter
         getClothingItemsFromStorage();
     }
 
@@ -89,9 +88,10 @@ public class WardrobeActivity extends AppCompatActivity {
     /**
      * Fetches clothing items from storage and updates the RecyclerView adapter.
      */
+    @SuppressLint("NotifyDataSetChanged")
     public void getClothingItemsFromStorage() {
         try {
-            // Fetching the stored data
+            // Fetching the stored data from SharedPreferences
             SharedPreferences sharedPreferences = getSharedPreferences("FashMeData", MODE_PRIVATE);
             String serializedObject = sharedPreferences.getString("Wardrobe", null);
 
@@ -108,10 +108,8 @@ public class WardrobeActivity extends AppCompatActivity {
                 return;
             }
 
-            // Deserialize the byte array to an object
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-            ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-            Wardrobe wardrobe = (Wardrobe) objectInputStream.readObject();
+            // Deserialize the byte array to a Wardrobe object
+            Wardrobe wardrobe = getWardrobeFromByteArray(bytes);
 
             // Update the RecyclerView adapter with the clothing items
             if (wardrobe != null) {
@@ -123,6 +121,23 @@ public class WardrobeActivity extends AppCompatActivity {
             System.out.println("Could not read storage: " + e.getMessage());
         }
     }
+
+    private void initialiseAdapterAndRecyclerView() {
+        // Initialize the RecyclerView and set its layout manager and adapter
+        recyclerViewClothes = binding.recyclerViewClothes;
+        recyclerViewClothes.setLayoutManager(new LinearLayoutManager(this));
+        clothingAdapter = new ClothingAdapter();
+        recyclerViewClothes.setAdapter(clothingAdapter);
+    }
+
+    private Wardrobe getWardrobeFromByteArray(byte[] bytes) throws IOException, ClassNotFoundException {
+        // Deserialize the byte array to a Wardrobe object
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        return (Wardrobe) objectInputStream.readObject();
+    }
+
+    // Click handlers for various buttons
 
     /**
      * Click handler for the Home button.
@@ -159,4 +174,5 @@ public class WardrobeActivity extends AppCompatActivity {
     public void buttonClick(View view) {
         toAddClothingView();
     }
+
 }

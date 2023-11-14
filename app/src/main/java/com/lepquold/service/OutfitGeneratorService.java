@@ -37,17 +37,17 @@ public class OutfitGeneratorService {
         List<Clothing> hatClothes = new ArrayList<>();
 
         for (Clothing clothing : filteredClothes) {
-            if (clothing.type.bodyPart == BodyParts.HEAD) {
+            if (clothing.getType().getBodyPart() == BodyParts.HEAD) {
                 headClothes.add(clothing);
-            } else if (clothing.type.bodyPart == BodyParts.FACE) {
+            } else if (clothing.getType().getBodyPart()  == BodyParts.FACE) {
                 faceClothes.add(clothing);
-            } else if (clothing.type.bodyPart == BodyParts.TORSO) {
+            } else if (clothing.getType().getBodyPart()  == BodyParts.TORSO) {
                 torsoClothes.add(clothing);
-            } else if (clothing.type.bodyPart == BodyParts.LEGS) {
+            } else if (clothing.getType().getBodyPart()  == BodyParts.LEGS) {
                 legsClothes.add(clothing);
-            } else if (clothing.type.bodyPart == BodyParts.FEET) {
+            } else if (clothing.getType().getBodyPart()  == BodyParts.FEET) {
                 feetClothes.add(clothing);
-            } else if (clothing.type.bodyPart == BodyParts.HEAD && clothing.type.name.equals("Hat")) {
+            } else if (clothing.getType().getBodyPart()  == BodyParts.HEAD && clothing.getType().getName().equals("Hat")) {
                 hatClothes.add(clothing);
             }
         }
@@ -97,15 +97,15 @@ public class OutfitGeneratorService {
         List<Clothing> filtered = new ArrayList<>();
 
         for (Clothing clothing : clothes) {
-            boolean isWaterproof = clothing.isWaterProof;
-            double clothingTemperature = clothing.temperature;
+            boolean isWaterproof = clothing.isWaterProof();
+            double clothingTemperature = clothing.getTemperature();
 
             if (isRaining && !isWaterproof) {
                 continue;
             }
 
             if (clothingTemperature >= (temperature - 10) && clothingTemperature <= (temperature + 10) &&
-                    clothing.style == style) {
+                    clothing.getStyle() == style) {
                 filtered.add(clothing);
             }
         }
