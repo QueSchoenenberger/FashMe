@@ -2,7 +2,6 @@ package com.lepquold;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -79,15 +78,27 @@ public class RewievOutfitActivity extends AppCompatActivity implements WeatherIn
         showDetails(location, isRaining, styleString, temperature);
     }
 
-    @SuppressLint("SetTextI18n")
+    /**
+     * Displays weather and style details on the user interface.
+     *
+     * @param location      The location for which the weather details are displayed.
+     * @param isRaining     A boolean indicating whether it's raining at the specified location.
+     * @param styleString   The style information to be displayed.
+     * @param temperature   The temperature to be displayed in Celsius.
+     */
     public void showDetails(String location, boolean isRaining, String styleString, double temperature){
+        // Set the location, temperature, and style information on the UI
         binding.textViewOrt.setText(location);
         binding.textViewGrad.setText(Math.round(temperature) + "°C");
+
+        // Set the rain status based on the isRaining boolean
         if (isRaining) {
             binding.textViewRegen.setText("It's Raining");
         } else {
             binding.textViewRegen.setText("It's Dry");
         }
+
+        // Set the clothing style information on the UI
         binding.textViewStyle.setText(styleString);
     }
     /**
