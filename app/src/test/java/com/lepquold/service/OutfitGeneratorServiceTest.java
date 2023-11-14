@@ -1,21 +1,24 @@
-package com.lepquold;
+package com.lepquold.service;
 
-import org.junit.Test;
 import static org.junit.Assert.*;
 
 import com.lepquold.helper.TypePopulator;
-import com.lepquold.model.*;
-import com.lepquold.service.OutfitGeneratorService;
-import com.lepquold.service.WeatherService;
+import com.lepquold.model.Clothing;
+import com.lepquold.model.Outfit;
+import com.lepquold.model.OutfitRequest;
+import com.lepquold.model.Style;
+import com.lepquold.model.Type;
+import com.lepquold.model.Wardrobe;
 
-import java.io.IOException;
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExampleUnitTest {
+public class OutfitGeneratorServiceTest {
 
     @Test
-    public void generateOutfit_generates_correct_outfit() {
+    public void generateOutfits() {
         // Set up clothing items
         Style casual = Style.Casual;
         Type tshirtType = TypePopulator.getTypes().get("T-Shirt");
@@ -54,16 +57,5 @@ public class ExampleUnitTest {
         assertNotNull(outfits);
         assertFalse(outfits.isEmpty());
         System.out.println(outfits); // Print the generated outfits
-    }
-
-    @Test
-    public void getTemperatureOfLocation() throws IOException {
-        // Test fetching temperature and rain status for a location
-        WeatherService service = new WeatherService();
-        WeatherInfo info = service.getTemperatureAndRainStatus("Zuerich");
-
-        // Perform assertions or validations based on the expected outcome
-        assertNotNull(info);
-        System.out.println(info.getTemperature() + "\n" + info.isRaining()); // Print the temperature and rain status
     }
 }
