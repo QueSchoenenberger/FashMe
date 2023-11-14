@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import com.lepquold.helper.TypePopulator;
 import com.lepquold.model.BodyParts;
 import com.lepquold.model.Clothing;
 import com.lepquold.model.Outfit;
@@ -24,10 +25,10 @@ public class ExampleUnitTest {
     @Test
     public void generateOutfit_generates_correct_outfit() {
         Style casual = Style.Casual;
-        Type tshirtType = new Type("T-Shirt", BodyParts.TORSO);
-        Type pantsType = new Type("Pants", BodyParts.LEGS);
-        Type shoeType = new Type("Shoes", BodyParts.FEET);
-        Type hatType = new Type("Hat", BodyParts.HEAD);
+        Type tshirtType = TypePopulator.getTypes().get("T-Shirt");
+        Type pantsType = TypePopulator.getTypes().get("Pants");
+        Type shoeType = TypePopulator.getTypes().get("Shoe");
+        Type hatType = TypePopulator.getTypes().get("Hat");
 
         Clothing tshirt = new Clothing("white T-Shirt", 23.00, false, casual, tshirtType);
         Clothing tshirt2 = new Clothing("green T-Shirt", 25.00, false, casual, tshirtType);
@@ -51,7 +52,7 @@ public class ExampleUnitTest {
 
         OutfitGeneratorService service = new OutfitGeneratorService();
 
-        List<Outfit> outfits = service.generateOutfits(request, wardrobe);
+        List<Outfit> outfits = service.generateOutfits(request, wardrobe,Style.Casual);
         System.out.println(outfits);
     }
 
