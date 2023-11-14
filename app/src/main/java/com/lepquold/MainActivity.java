@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Assuming you have a layout file named "activity_main.xml"
         setContentView(R.layout.activity_main);
+
     }
 
     // Lifecycle methods

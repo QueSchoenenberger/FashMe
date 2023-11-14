@@ -3,6 +3,7 @@ package com.lepquold.helper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lepquold.R;
 import com.lepquold.model.Clothing;
+import com.lepquold.service.OnDeleteClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +22,21 @@ import java.util.List;
 public class ClothingAdapter extends RecyclerView.Adapter<ClothingAdapter.ClothingViewHolder> {
     private List<Clothing> clothingList = new ArrayList<>();
 
+    private OnDeleteClickListener onDeleteClickListener;
+
+    public void setOnDeleteClickListener(OnDeleteClickListener onDeleteClickListener) {
+        this.onDeleteClickListener = onDeleteClickListener;
+    }
+
     // Provide a reference to the views for each data item
     public static class ClothingViewHolder extends RecyclerView.ViewHolder {
         TextView descriptionTextView;
+        Button deleteButton;
 
         public ClothingViewHolder(View itemView) {
             super(itemView);
             descriptionTextView = itemView.findViewById(R.id.descriptionTextView);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
         }
     }
 
@@ -44,7 +54,17 @@ public class ClothingAdapter extends RecyclerView.Adapter<ClothingAdapter.Clothi
     public void onBindViewHolder(@NonNull ClothingViewHolder holder, int position) {
         // Bind data to views for each clothing item
         Clothing clothing = clothingList.get(position);
-        holder.descriptionTextView.setText(clothing.description);
+        holder.descriptionTextView.setText(clothing.getDescription());
+
+        holder.deleteButton.setOnClickListener(v -> {
+            if (onDeleteClickListener != null) {
+                onDeleteClickListener.onDeleteClick(position);
+            }
+        });
+    }
+
+    public List<Clothing> getClothingList() {
+        return clothingList;
     }
 
     // Return the size of your dataset (invoked by the layout manager)

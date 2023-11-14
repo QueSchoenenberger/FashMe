@@ -13,16 +13,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lepquold.databinding.ActivityWardrobeBinding;
 import com.lepquold.helper.ClothingAdapter;
+import com.lepquold.model.Clothing;
 import com.lepquold.model.Wardrobe;
+import com.lepquold.service.OnDeleteClickListener;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.List;
 
 /**
  * Activity responsible for displaying the user's wardrobe and allowing the user to navigate to other features.
  */
-public class WardrobeActivity extends AppCompatActivity {
+public class WardrobeActivity extends AppCompatActivity implements OnDeleteClickListener {
     private ActivityWardrobeBinding binding;
     private RecyclerView recyclerViewClothes;
     private ClothingAdapter clothingAdapter;
@@ -37,6 +42,9 @@ public class WardrobeActivity extends AppCompatActivity {
 
         // Initialize the RecyclerView and its adapter
         initialiseAdapterAndRecyclerView();
+
+        // Set the delete click listener in the adapter
+        clothingAdapter.setOnDeleteClickListener(this);
     }
 
     @Override
@@ -173,6 +181,46 @@ public class WardrobeActivity extends AppCompatActivity {
      */
     public void buttonClick(View view) {
         toAddClothingView();
+    }
+
+    @Override
+    public void onDeleteClick(int position) {
+        // Handle the delete action here
+        // Get the clothing item to be deleted
+        Clothing deletedClothing = clothingAdapter.getClothingList().get(position);
+
+        // Remove the item from the dataset
+        clothingAdapter.getClothingList().remove(position);
+
+        // Notify the adapter of the change
+        clothingAdapter.notifyItemRemoved(position);
+
+        // Update the SharedPreferences with the modified dataset
+        persistUpdatedWardrobe(clothingAdapter.getClothingList());
+    }
+
+    private void persistUpdatedWardrobe(List<Clothing> updatedClothingList) {
+        try {
+            // Serialize the updated Wardrobe
+            Wardrobe updatedWardrobe = new Wardrobe(updatedClothingList);
+            String serializedWardrobe = getSerializedWardrobe(updatedWardrobe);
+
+            // Write the updated data to SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("FashMeData", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("Wardrobe", serializedWardrobe);
+            editor.apply();
+        } catch (Exception e) {
+            System.out.println("Could not persist updated wardrobe: " + e.getMessage());
+        }
+    }
+
+    private String getSerializedWardrobe(Wardrobe wardrobe) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(wardrobe);
+        objectOutputStream.close();
+        return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
     }
 
 }
